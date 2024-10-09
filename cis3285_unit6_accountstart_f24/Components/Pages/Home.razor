@@ -1,0 +1,94 @@
+﻿@page "/Home"
+@using Services;
+@using Domain;
+
+<h1>Wells Fargo Account Creator</h1>
+
+
+<label for="accountName">New Account Name:</label>
+<input type="text" id="accountName" name="accountName" @bind="newAccountName">
+<br>
+
+<button class="btn btn-primary" @onclick="btnAddAccount_Click">Add Account</button>
+<br>
+<br>
+<label for="accountList">Current Accounts:</label>
+<select name="accountList" id="accountList" class="form-control" @bind="selectedAccountName" @onclick="updateAccount">
+    @if (accountList != null)
+    {
+        <option value="NoAccountSelected">Select an account </option>
+
+        @foreach (string accName in accountList)
+        {
+            <option value="@accName">@accName </option>
+        }
+    }
+</select>
+<br>
+<br>
+<p>Account Balance: @strAccountBalance </p>
+
+<label for="depositAmount">Deposit Amount:</label>
+<input type="text" id="depositAmount" name="depositAmount" @bind="strDepositAmount">
+<button class="btn btn-primary" @onclick="btnDeposit_Click">Deposit</button>
+<br>
+
+<label for="withdrawAmount">Withdraw Amount:</label>
+<input type="text" id="withdrawAmount" name="withdrawAmount" @bind="strWithdrawAmount">
+<button class="btn btn-primary" @onclick="btnWithdraw_Click">Withdraw</button>
+<br>
+
+@code {
+    private string newAccountName;              // name in the new account textbox
+    private string selectedAccountName;         // account name selected from Acccout dropdown
+    private string strAccountBalance;           // display for the account balance
+    private decimal accountBalance = 0.00m;     // numeric value of account balance
+    private string strDepositAmount;            // amount to deposit as a string
+    private string strWithdrawAmount;           // amount to withdraw as a string
+
+    private List<string> accountList = new List<string>();
+    AccountService acctService = new AccountService();
+
+    private void updateAccount()
+    {
+        Console.Out.WriteLine("In Update Account");
+        if (string.Compare(selectedAccountName, "NoAccountSelected") != 0)
+        {
+            Console.Out.WriteLine(" ==== Update Account ====");
+            accountBalance = acctService.GetAccountBalance(selectedAccountName);
+            strAccountBalance = accountBalance.ToString();
+        }
+        else
+        {
+            strAccountBalance = "No account selected";
+        }
+
+    }
+
+    private void btnDeposit_Click()
+    {
+        decimal amount = decimal.Parse(strDepositAmount);
+        acctService.Deposit(selectedAccountName, amount);
+        accountBalance = acctService.GetAccountBalance(selectedAccountName);
+        strAccountBalance = accountBalance.ToString();
+    }
+
+    private void btnWithdraw_Click()
+    {
+        // implement withdraw here
+    }
+
+    private void btnAddAccount_Click()
+    {
+        string accountName = newAccountName;
+        accountList.Add(accountName);
+        acctService.CreateAccount(accountName, AccountType.Silver);
+    }
+
+    private void getBalance()
+    {
+        accountBalance = acctService.GetAccountBalance(selectedAccountName);
+        strAccountBalance = accountBalance.ToString();
+    }
+}
+
