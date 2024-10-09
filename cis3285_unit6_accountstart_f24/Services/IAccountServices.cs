@@ -9,6 +9,7 @@ namespace Services
 {
     public interface IAccountServices
     {
+        List<string> GetAllAccounts();
         void CreateAccount(string accountName, AccountType accountType);
         decimal GetAccountBalance(string accountName);
         int GetRewardPoints(string accountName);

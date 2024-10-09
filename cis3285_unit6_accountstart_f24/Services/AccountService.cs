@@ -19,6 +19,12 @@ namespace Services
             accountsDictionary = new Dictionary<string, AccountBase>();
         }
 
+        public List<string> GetAllAccounts()
+        // get a list of all account names
+        {
+            return new List<string>(accountsDictionary.Keys);
+        }
+
         public void CreateAccount(string accountName, AccountType accountType)
         // create a new account
         {

@@ -4,29 +4,33 @@
 
 <h1>Wells Fargo Account Creator</h1>
 
-
 <label for="accountName">New Account Name:</label>
 <input type="text" id="accountName" name="accountName" @bind="newAccountName">
 <br>
-
+<button @onclick="TestButtonClick">Test Button</button>
 <button class="btn btn-primary" @onclick="btnAddAccount_Click">Add Account</button>
+
 <br>
 <br>
 <label for="accountList">Current Accounts:</label>
-<select name="accountList" id="accountList" class="form-control" @bind="selectedAccountName" @onclick="updateAccount">
-    @if (accountList != null)
+<select name="accountList" id="accountList" class="form-control" @bind="selectedAccountName" @bind:event="onchange">
+    @if (accountList != null && accountList.Count > 0)
     {
-        <option value="NoAccountSelected">Select an account </option>
+        <option value="NoAccountSelected">Select an account</option>
 
         @foreach (string accName in accountList)
         {
-            <option value="@accName">@accName </option>
+            <option value="@accName">@accName</option>
         }
+    }
+    else
+    {
+        <option value="NoAccountSelected">No accounts available</option>
     }
 </select>
 <br>
 <br>
-<p>Account Balance: @strAccountBalance </p>
+<p>Account Balance: @strAccountBalance</p>
 
 <label for="depositAmount">Deposit Amount:</label>
 <input type="text" id="depositAmount" name="depositAmount" @bind="strDepositAmount">
@@ -39,6 +43,11 @@
 <br>
 
 @code {
+    private void TestButtonClick()
+    {
+        Console.WriteLine("Test button clicked!");
+    }
+
     private string newAccountName;              // name in the new account textbox
     private string selectedAccountName;         // account name selected from Acccout dropdown
     private string strAccountBalance;           // display for the account balance
@@ -49,12 +58,16 @@
     private List<string> accountList = new List<string>();
     AccountService acctService = new AccountService();
 
+    protected override void OnInitialized()
+    {
+        // Initialize account list if needed
+        accountList = acctService.GetAllAccounts();
+    }
+
     private void updateAccount()
     {
-        Console.Out.WriteLine("In Update Account");
         if (string.Compare(selectedAccountName, "NoAccountSelected") != 0)
         {
-            Console.Out.WriteLine(" ==== Update Account ====");
             accountBalance = acctService.GetAccountBalance(selectedAccountName);
             strAccountBalance = accountBalance.ToString();
         }
@@ -62,7 +75,6 @@
         {
             strAccountBalance = "No account selected";
         }
-
     }
 
     private void btnDeposit_Click()
@@ -71,24 +83,31 @@
         acctService.Deposit(selectedAccountName, amount);
         accountBalance = acctService.GetAccountBalance(selectedAccountName);
         strAccountBalance = accountBalance.ToString();
+        StateHasChanged();
     }
 
     private void btnWithdraw_Click()
     {
-        // implement withdraw here
+        decimal amount = decimal.Parse(strWithdrawAmount);
+        acctService.Withdrawal(selectedAccountName, amount);
+        accountBalance = acctService.GetAccountBalance(selectedAccountName);
+        strAccountBalance = accountBalance.ToString();
+        StateHasChanged();
     }
 
     private void btnAddAccount_Click()
     {
-        string accountName = newAccountName;
-        accountList.Add(accountName);
-        acctService.CreateAccount(accountName, AccountType.Silver);
-    }
+        Console.WriteLine("Add Account button clicked."); // For debugging
 
-    private void getBalance()
-    {
-        accountBalance = acctService.GetAccountBalance(selectedAccountName);
-        strAccountBalance = accountBalance.ToString();
+        string accountName = newAccountName;
+        acctService.CreateAccount(accountName, AccountType.Silver);
+
+        //accountList = acctService.GetAllAccounts();
+        // Create a new list to trigger UI re-render
+        accountList = new List<string>(accountList) { accountName };
+
+        newAccountName = string.Empty; // Clear the input field
+        StateHasChanged();
+
     }
 }
-
