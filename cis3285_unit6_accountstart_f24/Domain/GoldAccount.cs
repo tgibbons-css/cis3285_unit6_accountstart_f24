@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
+    // Gold accounts award points for both the existing balance and this transaction.
     public class GoldAccount : AccountBase
     {
         public override int CalculateRewardPoints(decimal amount)
         {
+            // Combine both contributions, then discard any fractional point.
             return (int)decimal.Floor((Balance / GoldBalanceCostPerPoint) + (amount / GoldTransactionCostPerPoint));
         }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
+    // The factory uses this value to choose which account subclass to create.
     public enum AccountType
     {
         Silver,

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
+    // Shared account state and behavior; each account type supplies its own reward rule.
     public abstract class AccountBase
     {
+        // Create the requested concrete account while returning the common base type.
         public static AccountBase CreateAccount(AccountType type)
         {
             AccountBase account = null;
@@ -40,10 +42,12 @@ namespace Domain
 
         public void AddTransaction(decimal amount)
         {
+            // Calculate points before changing Balance so account rules use the prior balance.
             RewardPoints += CalculateRewardPoints(amount);
             Balance += amount;
         }
 
+        // Subclasses implement the reward calculation for their account type.
         public abstract int CalculateRewardPoints(decimal amount);
     }
 }
