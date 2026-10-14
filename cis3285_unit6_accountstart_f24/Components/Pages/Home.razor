@@ -13,7 +13,7 @@
 <br>
 <br>
 <label for="accountList">Current Accounts:</label>
-<select name="accountList" id="accountList" class="form-control" @bind="selectedAccountName" @bind:event="onchange">
+<select name="accountList" id="accountList" class="form-control" @bind="selectedAccountName" @bind:after="updateAccount" @bind:event="onchange">
     @if (accountList != null && accountList.Count > 0)
     {
         <option value="NoAccountSelected">Select an account</option>
@@ -37,19 +37,13 @@
 <button class="btn btn-primary" @onclick="btnDeposit_Click">Deposit</button>
 <br>
 
-<label for="withdrawAmount">Withdraw Amount:</label>
-<input type="text" id="withdrawAmount" name="withdrawAmount" @bind="strWithdrawAmount">
-<button class="btn btn-primary" @onclick="btnWithdraw_Click">Withdraw</button>
-<br>
-
 @code {
 
-    private string newAccountName;              // name in the new account textbox
-    private string selectedAccountName;         // account name selected from Acccout dropdown
-    private string strAccountBalance;           // display for the account balance
-    private decimal accountBalance = 0.00m;     // numeric value of account balance
-    private string strDepositAmount;            // amount to deposit as a string
-    private string strWithdrawAmount;           // amount to withdraw as a string
+    private string newAccountName = string.Empty;              // name in the new account textbox
+    private string selectedAccountName = "NoAccountSelected"; // account name selected from Acccout dropdown
+    private string strAccountBalance = string.Empty;           // display for the account balance
+    private decimal accountBalance = 0.00m;                   // numeric value of account balance
+    private string strDepositAmount = string.Empty;            // amount to deposit as a string
 
     private List<string> accountList = new List<string>();
     AccountService acctService = new AccountService();
@@ -77,15 +71,6 @@
     {
         decimal amount = decimal.Parse(strDepositAmount);
         acctService.Deposit(selectedAccountName, amount);
-        accountBalance = acctService.GetAccountBalance(selectedAccountName);
-        strAccountBalance = accountBalance.ToString();
-        StateHasChanged();
-    }
-
-    private void btnWithdraw_Click()
-    {
-        decimal amount = decimal.Parse(strWithdrawAmount);
-        acctService.Withdrawal(selectedAccountName, amount);
         accountBalance = acctService.GetAccountBalance(selectedAccountName);
         strAccountBalance = accountBalance.ToString();
         StateHasChanged();
