@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,9 +42,19 @@ namespace Domain
 
         public void AddTransaction(decimal amount)
         {
-            // Calculate points before changing Balance so account rules use the prior balance.
-            RewardPoints += CalculateRewardPoints(amount);
+            // Deposits can earn reward points. Negative transactions should not.
+            if (amount > 0)
+            {
+                RewardPoints += CalculateRewardPoints(amount);
+            }
+
             Balance += amount;
+        }
+
+        // Withdrawals have their own operation instead of being treated as negative deposits.
+        public void Withdraw(decimal amount)
+        {
+            Balance -= amount;
         }
 
         // Subclasses implement the reward calculation for their account type.
