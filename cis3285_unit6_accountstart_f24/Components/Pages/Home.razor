@@ -8,7 +8,9 @@
 <label for="accountName">New Account Name:</label>
 <input type="text" id="accountName" name="accountName" @bind="newAccountName">
 <br>
-<button class="btn btn-primary" @onclick="btnAddAccount_Click">Add Account</button>
+<button class="btn btn-primary" @onclick="btnAddAccount_Click_silver">Add Silver Account</button>
+<button class="btn btn-primary" @onclick="btnAddAccount_Click_gold">Add Gold Account</button>
+<button class="btn btn-primary" @onclick="btnAddAccount_Click_platinum">Add Platinum Account</button>
 
 <br>
 <br>
@@ -37,6 +39,12 @@
 <button class="btn btn-primary" @onclick="btnDeposit_Click">Deposit</button>
 <br>
 
+<br>
+<label for="WithdrawAmount">Withdraw Amount:</label>
+<input type="text" id="withdrawAmount" name="WithdrawAmount" @bind="strWithdrawAmount">
+<button class="btn btn-primary" @onclick="btnWithdraw_Click">Withdraw</button>
+<br>
+
 @code {
 
     private string newAccountName = string.Empty;              // name in the new account textbox
@@ -44,6 +52,7 @@
     private string strAccountBalance = string.Empty;           // display for the account balance
     private decimal accountBalance = 0.00m;                   // numeric value of account balance
     private string strDepositAmount = string.Empty;            // amount to deposit as a string
+    private string strWithdrawAmount = string.Empty;           // amount to withdraw as a string
 
     private List<string> accountList = new List<string>();
     AccountService acctService = new AccountService();
@@ -76,12 +85,49 @@
         StateHasChanged();
     }
 
-    private void btnAddAccount_Click()
+    private void btnWithdraw_Click()
+    {
+        decimal amount = decimal.Parse(strWithdrawAmount);
+        acctService.Withdrawal(selectedAccountName, amount);
+        accountBalance = acctService.GetAccountBalance(selectedAccountName);
+        strAccountBalance = accountBalance.ToString();
+        StateHasChanged();
+    }
+
+    private void btnAddAccount_Click_silver()
     {
         Console.WriteLine("Add Account button clicked."); // For debugging
 
         string accountName = newAccountName;
         acctService.CreateAccount(accountName, AccountType.Silver);
+
+        accountList = acctService.GetAllAccounts();
+
+        newAccountName = string.Empty; // Clear the input field
+        StateHasChanged();
+
+    }
+
+    private void btnAddAccount_Click_gold()
+    {
+        Console.WriteLine("Add Account button clicked."); // For debugging
+
+        string accountName = newAccountName;
+        acctService.CreateAccount(accountName, AccountType.Gold);
+
+        accountList = acctService.GetAllAccounts();
+
+        newAccountName = string.Empty; // Clear the input field
+        StateHasChanged();
+
+    }
+
+    private void btnAddAccount_Click_platinum()
+    {
+        Console.WriteLine("Add Account button clicked."); // For debugging
+
+        string accountName = newAccountName;
+        acctService.CreateAccount(accountName, AccountType.Platinum);
 
         accountList = acctService.GetAllAccounts();
 
