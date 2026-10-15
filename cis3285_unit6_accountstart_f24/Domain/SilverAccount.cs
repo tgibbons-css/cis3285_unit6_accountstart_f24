@@ -11,6 +11,11 @@ namespace Domain
     {
         public override int CalculateRewardPoints(decimal amount)
         {
+            if (amount < 0)
+            {
+                // No points for withdrawals.
+                return 0;
+            }
             // Floor discards any fractional point.
             return (int)decimal.Floor(amount / SilverTransactionCostPerPoint);
         }
