@@ -47,6 +47,11 @@ namespace Domain
             Balance += amount;
         }
 
+        public void WithdrawTransaction(decimal amount)
+        {
+            Balance -= amount;
+        }
+
         // Subclasses implement the reward calculation for their account type.
         public abstract int CalculateRewardPoints(decimal amount);
     }
