@@ -11,6 +11,10 @@ namespace Domain
     {
         public override int CalculateRewardPoints(decimal amount)
         {
+            if (amount < 0)
+            {
+                return 0;
+            }
             // Combine both contributions, then discard any fractional point.
             return (int)decimal.Floor((Balance / GoldBalanceCostPerPoint) + (amount / GoldTransactionCostPerPoint));
         }
