@@ -37,6 +37,16 @@
 <button class="btn btn-primary" @onclick="btnDeposit_Click">Deposit</button>
 <br>
 
+<label for="withdrawalAmount">Withdrawal Amount:</label>
+<input type="text" id="withdrawalAmount" name="withdrawalAmount" @bind="strWithdrawalAmount">
+<button class="btn btn-primary" @onclick="btnWithdrawal_Click">Withdrawal</button>
+<br>
+
+@if (!string.IsNullOrEmpty(strErrorMessage))
+{
+    <p class="text-danger">@strErrorMessage</p>
+}
+
 @code {
 
     private string newAccountName = string.Empty;              // name in the new account textbox
@@ -44,6 +54,8 @@
     private string strAccountBalance = string.Empty;           // display for the account balance
     private decimal accountBalance = 0.00m;                   // numeric value of account balance
     private string strDepositAmount = string.Empty;            // amount to deposit as a string
+    private string strWithdrawalAmount = string.Empty;         // amount to withdraw as a string
+    private string strErrorMessage = string.Empty;             // validation message shown below the form
 
     private List<string> accountList = new List<string>();
     AccountService acctService = new AccountService();
@@ -67,12 +79,55 @@
         }
     }
 
+    // Checks that an account is selected and the text is a positive number.
+    // Sets strErrorMessage and returns false if anything is wrong.
+    private bool TryGetAmount(string strAmount, out decimal amount)
+    {
+        amount = 0;
+        if (string.Compare(selectedAccountName, "NoAccountSelected") == 0)
+        {
+            strErrorMessage = "Please select an account first.";
+            return false;
+        }
+        if (!decimal.TryParse(strAmount, out amount))
+        {
+            strErrorMessage = "Please enter a valid number for the amount.";
+            return false;
+        }
+        if (amount <= 0)
+        {
+            strErrorMessage = "The amount must be greater than zero.";
+            return false;
+        }
+        strErrorMessage = string.Empty;
+        return true;
+    }
+
     private void btnDeposit_Click()
     {
-        decimal amount = decimal.Parse(strDepositAmount);
+        if (!TryGetAmount(strDepositAmount, out decimal amount))
+        {
+            return;
+        }
+
         acctService.Deposit(selectedAccountName, amount);
         accountBalance = acctService.GetAccountBalance(selectedAccountName);
         strAccountBalance = accountBalance.ToString();
+        strDepositAmount = string.Empty; // Clear the input field
+        StateHasChanged();
+    }
+
+    private void btnWithdrawal_Click()
+    {
+        if (!TryGetAmount(strWithdrawalAmount, out decimal amount))
+        {
+            return;
+        }
+
+        acctService.Withdrawal(selectedAccountName, amount);
+        accountBalance = acctService.GetAccountBalance(selectedAccountName);
+        strAccountBalance = accountBalance.ToString();
+        strWithdrawalAmount = string.Empty; // Clear the input field
         StateHasChanged();
     }
 
@@ -80,8 +135,20 @@
     {
         Console.WriteLine("Add Account button clicked."); // For debugging
 
-        string accountName = newAccountName;
+        string accountName = newAccountName.Trim();
+        if (string.IsNullOrEmpty(accountName))
+        {
+            strErrorMessage = "Please enter an account name.";
+            return;
+        }
+        if (accountList.Contains(accountName) || accountName == "NoAccountSelected")
+        {
+            strErrorMessage = $"An account named \"{accountName}\" already exists.";
+            return;
+        }
+
         acctService.CreateAccount(accountName, AccountType.Silver);
+        strErrorMessage = string.Empty;
 
         accountList = acctService.GetAllAccounts();
 

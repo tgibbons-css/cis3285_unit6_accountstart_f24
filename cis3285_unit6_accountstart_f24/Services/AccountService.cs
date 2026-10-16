@@ -53,9 +53,14 @@ namespace Services
         }
 
         public void Withdrawal(string accountName, decimal amount)
-        // withdrawal the given account into the account named
+        // withdraw the given amount from the account named
         {
-            throw new NotImplementedException();
+            if (amount <= 0)
+            {
+                throw new ArgumentException("Withdrawal amount must be positive.");
+            }
+            AccountBase acc = FindAccount(accountName);
+            acc.AddTransaction(-amount);
         }
 
         private AccountBase FindAccount(string accountName)
