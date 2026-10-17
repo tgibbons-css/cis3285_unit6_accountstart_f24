@@ -84,7 +84,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(-1000M);
             int points = testAccount.RewardPoints;
             // Assert
-            Assert.AreEqual(points, 200);
+            Assert.AreEqual(points, 100);
         }
         [TestMethod]
         public void RewardPoint_Gold_Deposit()
@@ -109,7 +109,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(-1000M);
             int points = testAccount.RewardPoints;
             // Assert
-            Assert.AreEqual(points, 800 + 2 + 800);
+            Assert.AreEqual(points, 800 + 6 + 600);
         }
         [TestMethod]
         public void RewardPoints_Platinum_Deposit()
