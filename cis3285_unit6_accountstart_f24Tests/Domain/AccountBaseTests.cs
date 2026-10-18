@@ -58,6 +58,34 @@ namespace Domain.Tests
             Assert.AreEqual(balance, -300M);
         }
 
+        [TestMethod]
+        public void WithdrawRemovesFundsFromBalance()
+        {
+            AccountBase testAccount = AccountBase.CreateAccount(AccountType.Silver);
+            testAccount.AddTransaction(+200M);
+            testAccount.Withdraw(75M);
+            decimal balance = testAccount.Balance;
+            Assert.AreEqual(balance, +125M);
+        }
+        [TestMethod]
+        public void WithdrawCanCreateNegativeBalance()
+        {
+            AccountBase testAccount = AccountBase.CreateAccount(AccountType.Silver);
+            testAccount.Withdraw(50M);
+            decimal balance = testAccount.Balance;
+            Assert.AreEqual(balance, -50M);
+        }
+        [TestMethod]
+        public void WithdrawDoesNotChangeRewardPoints()
+        {
+            AccountBase testAccount = AccountBase.CreateAccount(AccountType.Platinum);
+            testAccount.AddTransaction(4000M);
+            testAccount.AddTransaction(4000M);
+            testAccount.Withdraw(1000M);
+            int points = testAccount.RewardPoints;
+            Assert.AreEqual(points, 2000 + 4 + 2000);
+        }
+
         ///
         ///   =================== Reward Points
         ///
