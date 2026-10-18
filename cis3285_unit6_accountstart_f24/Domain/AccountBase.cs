@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,23 +10,23 @@ namespace Domain
     // Shared account state and behavior; each account type supplies its own reward rule.
     public abstract class AccountBase
     {
-        // Create the requested concrete account while returning the common base type.
+        // Create the requested account type.
         public static AccountBase CreateAccount(AccountType type)
         {
-            AccountBase account = null;
-            switch(type)
+            switch (type)
             {
                 case AccountType.Silver:
-                    account = new SilverAccount();
-                    break;
+                    return new SilverAccount();
+
                 case AccountType.Gold:
-                    account = new GoldAccount();
-                    break;
+                    return new GoldAccount();
+
                 case AccountType.Platinum:
-                    account = new PlatinumAccount();
-                    break;
+                    return new PlatinumAccount();
+
+                default:
+                    throw new ArgumentException("Invalid account type");
             }
-            return account;
         }
 
         public decimal Balance
@@ -42,12 +43,17 @@ namespace Domain
 
         public void AddTransaction(decimal amount)
         {
-            // Calculate points before changing Balance so account rules use the prior balance.
-            RewardPoints += CalculateRewardPoints(amount);
+            // Only give reward points for positive deposits.
+            if (amount > 0)
+            {
+                RewardPoints += CalculateRewardPoints(amount);
+            }
+
+            // Update balance for deposits and withdrawals.
             Balance += amount;
         }
 
-        // Subclasses implement the reward calculation for their account type.
+        // Each account type calculates reward points differently.
         public abstract int CalculateRewardPoints(decimal amount);
     }
 }
