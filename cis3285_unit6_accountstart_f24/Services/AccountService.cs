@@ -1,4 +1,4 @@
-﻿ 
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Services
 
         public AccountService()
         {
-            //instantiate the dictionary for accounts
+            // instantiate the dictionary for accounts
             accountsDictionary = new Dictionary<string, AccountBase>();
         }
 
@@ -38,6 +38,7 @@ namespace Services
             AccountBase acc = FindAccount(accountName);
             return acc.Balance;
         }
+
         public int GetRewardPoints(string accountName)
         // find the reward points of the given account
         {
@@ -46,16 +47,17 @@ namespace Services
         }
 
         public void Deposit(string accountName, decimal amount)
-        // deposit the given account into the account named
+        // deposit the given amount into the account named
         {
             AccountBase acc = FindAccount(accountName);
             acc.AddTransaction(amount);
         }
 
         public void Withdrawal(string accountName, decimal amount)
-        // withdrawal the given account into the account named
+        // remove the given amount from the account
         {
-            throw new NotImplementedException();
+            AccountBase acc = FindAccount(accountName);
+            acc.AddTransaction(-amount);
         }
 
         private AccountBase FindAccount(string accountName)
@@ -66,6 +68,5 @@ namespace Services
             }
             return null;
         }
-
     }
 }
