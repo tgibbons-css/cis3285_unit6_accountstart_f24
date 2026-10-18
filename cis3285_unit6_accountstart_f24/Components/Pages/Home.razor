@@ -35,6 +35,7 @@
 <label for="depositAmount">Deposit Amount:</label>
 <input type="text" id="depositAmount" name="depositAmount" @bind="strDepositAmount">
 <button class="btn btn-primary" @onclick="btnDeposit_Click">Deposit</button>
+<button class="btn btn-primary" @onclick="btnWithdrawal_Click">Withdrawal</button>
 <br>
 
 @code {
@@ -71,6 +72,15 @@
     {
         decimal amount = decimal.Parse(strDepositAmount);
         acctService.Deposit(selectedAccountName, amount);
+        accountBalance = acctService.GetAccountBalance(selectedAccountName);
+        strAccountBalance = accountBalance.ToString();
+        StateHasChanged();
+    }
+
+    private void btnWithdrawal_Click()
+    {
+        decimal amount = decimal.Parse(strDepositAmount);
+        acctService.Withdrawal(selectedAccountName, amount);
         accountBalance = acctService.GetAccountBalance(selectedAccountName);
         strAccountBalance = accountBalance.ToString();
         StateHasChanged();

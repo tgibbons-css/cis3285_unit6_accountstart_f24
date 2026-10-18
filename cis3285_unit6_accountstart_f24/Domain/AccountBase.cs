@@ -42,9 +42,18 @@ namespace Domain
 
         public void AddTransaction(decimal amount)
         {
-            // Calculate points before changing Balance so account rules use the prior balance.
-            RewardPoints += CalculateRewardPoints(amount);
+            if (amount > 0)
+            {
+                // Calculate points before changing Balance so account rules use the prior balance.
+                RewardPoints += CalculateRewardPoints(amount);
+            }
+
             Balance += amount;
+        }
+
+        public void Withdraw(decimal amount)
+        {
+            Balance -= amount;
         }
 
         // Subclasses implement the reward calculation for their account type.

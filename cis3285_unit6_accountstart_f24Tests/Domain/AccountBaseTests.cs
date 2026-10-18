@@ -40,7 +40,7 @@ namespace Domain.Tests
             AccountBase testAccount = AccountBase.CreateAccount(AccountType.Silver);
             // Act
             testAccount.AddTransaction(+200M);
-            testAccount.AddTransaction(-100M);
+            testAccount.Withdraw(100M);
             decimal balance = testAccount.Balance;
             // Assert
             Assert.AreEqual(balance, +100M);
@@ -52,7 +52,7 @@ namespace Domain.Tests
             AccountBase testAccount = AccountBase.CreateAccount(AccountType.Silver);
             // Act
             testAccount.AddTransaction(+200M);
-            testAccount.AddTransaction(-500M);
+            testAccount.Withdraw(500M);
             decimal balance = testAccount.Balance;
             // Assert
             Assert.AreEqual(balance, -300M);
@@ -81,7 +81,7 @@ namespace Domain.Tests
             // Act
             testAccount.AddTransaction(1000M);
             testAccount.AddTransaction(1000M);
-            testAccount.AddTransaction(-1000M);
+            testAccount.Withdraw(1000M);
             int points = testAccount.RewardPoints;
             // Assert
             Assert.AreEqual(points, 200);
@@ -106,7 +106,7 @@ namespace Domain.Tests
             // Act
             testAccount.AddTransaction(4000M);
             testAccount.AddTransaction(4000M);
-            testAccount.AddTransaction(-1000M);
+            testAccount.Withdraw(1000M);
             int points = testAccount.RewardPoints;
             // Assert
             Assert.AreEqual(points, 800 + 2 + 800);
@@ -131,10 +131,25 @@ namespace Domain.Tests
             // Act
             testAccount.AddTransaction(4000M);
             testAccount.AddTransaction(4000M);
-            testAccount.AddTransaction(-1000M);
+            testAccount.Withdraw(1000M);
             int points = testAccount.RewardPoints;
             // Assert
             Assert.AreEqual(points, 2000 + 4 + 2000);
+        }
+
+        [TestMethod]
+        public void RewardPoints_Platinum_NegativeTransaction()
+        {
+            // Arrange
+            AccountBase testAccount = AccountBase.CreateAccount(AccountType.Platinum);
+            testAccount.AddTransaction(4000M);
+
+            // Act
+            testAccount.AddTransaction(-1M);
+            int points = testAccount.RewardPoints;
+
+            // Assert
+            Assert.AreEqual(points, 2000);
         }
     }
 }
