@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Domain;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace Domain.Tests
             // Act
             decimal balance = testAccount.Balance;
             // Assert
-            Assert.AreEqual(balance, 0.00M);
+            Assert.AreEqual(0.00M, balance);
         }
         [TestMethod]
         public void DepositToAccountBalance()
@@ -31,7 +31,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(+123.45M);
             decimal balance = testAccount.Balance;
             // Assert
-            Assert.AreEqual(balance, +123.45M);
+            Assert.AreEqual(+123.45M, balance);
         }
         [TestMethod]
         public void WithdrawalToAccountBalance()
@@ -43,7 +43,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(-100M);
             decimal balance = testAccount.Balance;
             // Assert
-            Assert.AreEqual(balance, +100M);
+            Assert.AreEqual(+100M, balance);
         }
         [TestMethod]
         public void NegativeBalanceAllowed()
@@ -55,7 +55,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(-500M);
             decimal balance = testAccount.Balance;
             // Assert
-            Assert.AreEqual(balance, -300M);
+            Assert.AreEqual(-300M, balance);
         }
 
         ///
@@ -71,7 +71,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(1000M);
             int points = testAccount.RewardPoints;
             // Assert
-            Assert.AreEqual(points, 200);
+            Assert.AreEqual(200, points);
         }
         [TestMethod]
         public void RewardPoints_Silver_Withdrawal()
@@ -84,7 +84,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(-1000M);
             int points = testAccount.RewardPoints;
             // Assert
-            Assert.AreEqual(points, 200);
+            Assert.AreEqual(200, points);
         }
         [TestMethod]
         public void RewardPoint_Gold_Deposit()
@@ -96,7 +96,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(4000M);
             int points = testAccount.RewardPoints;
             // Assert
-            Assert.AreEqual(points, 800 + 2 + 800);
+            Assert.AreEqual(800 + 2 + 800, points);
         }
         [TestMethod]
         public void RewardPoints_Gold_Withdrawal()
@@ -109,7 +109,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(-1000M);
             int points = testAccount.RewardPoints;
             // Assert
-            Assert.AreEqual(points, 800 + 2 + 800);
+            Assert.AreEqual(800 + 2 + 800, points);
         }
         [TestMethod]
         public void RewardPoints_Platinum_Deposit()
@@ -121,7 +121,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(4000M);
             int points = testAccount.RewardPoints;
             // Assert
-            Assert.AreEqual(points, 2000 + 4 + 2000);
+            Assert.AreEqual(2000 + 4 + 2000, points);
         }
         [TestMethod]
         public void RewardPoints_Platinum_Withdrawal()
@@ -134,7 +134,7 @@ namespace Domain.Tests
             testAccount.AddTransaction(-1000M);
             int points = testAccount.RewardPoints;
             // Assert
-            Assert.AreEqual(points, 2000 + 4 + 2000);
+            Assert.AreEqual(2000 + 4 + 2000, points);
         }
     }
 }

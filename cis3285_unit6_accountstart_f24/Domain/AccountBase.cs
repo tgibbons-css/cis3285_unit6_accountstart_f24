@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +25,7 @@ namespace Domain
                     account = new PlatinumAccount();
                     break;
             }
-            return account;
+            return account ?? throw new System.ArgumentOutOfRangeException(nameof(type), type, "Unsupported account type.");
         }
 
         public decimal Balance
@@ -45,6 +45,18 @@ namespace Domain
             // Calculate points before changing Balance so account rules use the prior balance.
             RewardPoints += CalculateRewardPoints(amount);
             Balance += amount;
+        }
+
+        public void Deposit(decimal amount)
+        {
+            // Calculate points before changing Balance so account rules use the prior balance.
+            RewardPoints += CalculateRewardPoints(amount);
+            Balance += amount;
+        }
+
+        public void Withdrawal(decimal amount)
+        {
+            Balance -= amount;
         }
 
         // Subclasses implement the reward calculation for their account type.

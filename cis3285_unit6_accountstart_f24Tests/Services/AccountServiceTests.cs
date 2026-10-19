@@ -1,4 +1,4 @@
-﻿using Domain;
+using Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Services;
 using System;
@@ -22,7 +22,7 @@ namespace Services.Tests
             acctService.CreateAccount(accountName, AccountType.Silver);
             decimal balance = acctService.GetAccountBalance(accountName);
             // Assert
-            Assert.AreEqual(balance, 0.00M);
+            Assert.AreEqual(0.00M, balance);
         }
 
         [TestMethod]
@@ -37,7 +37,7 @@ namespace Services.Tests
             acctService.Deposit(accountName, 25M);
             decimal balance = acctService.GetAccountBalance(accountName);
             // Assert
-            Assert.AreEqual(balance, 125M);
+            Assert.AreEqual(125M, balance);
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace Services.Tests
             acctService.Withdrawal(accountName, 25M);
             decimal balance = acctService.GetAccountBalance(accountName);
             // Assert
-            Assert.AreEqual(balance, 75M);
+            Assert.AreEqual(75M, balance);
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace Services.Tests
             acctService.Withdrawal(accountName, 100M);
             decimal balance = acctService.GetAccountBalance(accountName);
             // Assert
-            Assert.AreEqual(balance, -100M);
+            Assert.AreEqual(-100M, balance);
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace Services.Tests
             acctService.Deposit(accountName, 1000M);
             int points = acctService.GetRewardPoints(accountName);
             // Assert
-            Assert.AreEqual(points, 200);
+            Assert.AreEqual(200, points);
         }
         [TestMethod]
         public void RewardPoints_Silver_Withdrawal()
@@ -96,7 +96,7 @@ namespace Services.Tests
             acctService.Withdrawal(accountName, 1000M);
             int points = acctService.GetRewardPoints(accountName);
             // Assert
-            Assert.AreEqual(points, 200);
+            Assert.AreEqual(200, points);
         }
         [TestMethod]
         public void RewardPoints_Gold_Deposit()
@@ -110,7 +110,7 @@ namespace Services.Tests
             acctService.Deposit(accountName, 4000M);
             int points = acctService.GetRewardPoints(accountName);
             // Assert
-            Assert.AreEqual(points, 800 + 2 + 800);
+            Assert.AreEqual(800 + 2 + 800, points);
         }
         [TestMethod]
         public void RewardPoints_Gold_Withdrawal()
@@ -125,7 +125,7 @@ namespace Services.Tests
             acctService.Withdrawal(accountName, 4000M);
             int points = acctService.GetRewardPoints(accountName);
             // Assert
-            Assert.AreEqual(points, 800 + 2 + 800);
+            Assert.AreEqual(800 + 2 + 800, points);
         }
         [TestMethod]
         public void RewardPoints_Platinum_Deposit()
@@ -139,7 +139,7 @@ namespace Services.Tests
             acctService.Deposit(accountName, 4000M);
             int points = acctService.GetRewardPoints(accountName);
             // Assert
-            Assert.AreEqual(points, 2000 + 4 + 2000);
+            Assert.AreEqual(2000 + 4 + 2000, points);
         }
         [TestMethod]
         public void RewardPoints_Platinum_Withdrawal()
@@ -154,7 +154,7 @@ namespace Services.Tests
             acctService.Withdrawal(accountName, 4000M);
             int points = acctService.GetRewardPoints(accountName);
             // Assert
-            Assert.AreEqual(points, 2000 + 4 + 2000);
+            Assert.AreEqual(2000 + 4 + 2000, points);
         }
     }
 }
