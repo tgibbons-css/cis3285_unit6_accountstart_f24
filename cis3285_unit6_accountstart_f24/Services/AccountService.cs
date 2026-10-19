@@ -52,10 +52,14 @@ namespace Services
             acc.AddTransaction(amount);
         }
 
+
         public void Withdrawal(string accountName, decimal amount)
-        // withdrawal the given account into the account named
         {
-            throw new NotImplementedException();
+            // Find the account selected by the user.
+            AccountBase acc = FindAccount(accountName);
+
+            // Subtract the withdrawal amount from the balance.
+            acc.AddTransaction(-amount);
         }
 
         private AccountBase FindAccount(string accountName)
